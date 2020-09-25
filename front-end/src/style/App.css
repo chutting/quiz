@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.market {
+  display: grid;
+  grid-template-columns: repeat(4, 20%);
+  grid-column-gap: 20px;
+  justify-content: center;
+}
+
+.commodity-item-img {
+  width: 200px;
+}
