@@ -21,6 +21,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -108,6 +109,33 @@ class ShoppingApplicationTests {
 				.andExpect(jsonPath("$", hasSize(2)));
 	}
 
+	@Test
+	void shouldDeleteOrder() throws Exception{
+		CommodityEntity commodityEntity1  = commodityRepo.findById(1).get();
+		CommodityEntity commodityEntity2  = commodityRepo.findById(2).get();
+
+
+		OrderEntity order1 = OrderEntity.builder()
+				.count(2)
+				.commodity(commodityEntity1)
+				.build();
+
+		OrderEntity order2 = OrderEntity.builder()
+				.commodity(commodityEntity2)
+				.count(7)
+				.build();
+
+		orderRepo.save(order1);
+		orderRepo.save(order2);
+
+		mockMvc.perform(delete("/order")
+				.content(convertCommodityEntityToJsonString(commodityEntity1))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isNoContent());
+
+		assertEquals(1, orderRepo.findAll().size());
+	}
+
 //	private Commodity convertCommodityEntityToCommodity(CommodityEntity commodityEntity) {
 //		return Commodity.builder()
 //				.name(commodityEntity.getName())
@@ -121,6 +149,16 @@ class ShoppingApplicationTests {
 	private String convertOrderToJsonString(Order order) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = objectMapper.writeValueAsString(order);
+
+//		StringBuilder stringBuilder =new StringBuilder(jsonString.substring(0, jsonString.length() - 1));
+//		String userJson = objectMapper.writeValueAsString(user);
+//		StringBuilder output = stringBuilder.append(",\"user\":").append(userJson).append("}");
+		return jsonString;
+	}
+
+	private String convertCommodityEntityToJsonString(CommodityEntity commodity) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String jsonString = objectMapper.writeValueAsString(commodity);
 
 //		StringBuilder stringBuilder =new StringBuilder(jsonString.substring(0, jsonString.length() - 1));
 //		String userJson = objectMapper.writeValueAsString(user);
