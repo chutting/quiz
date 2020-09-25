@@ -136,33 +136,29 @@ class ShoppingApplicationTests {
 		assertEquals(1, orderRepo.findAll().size());
 	}
 
-//	private Commodity convertCommodityEntityToCommodity(CommodityEntity commodityEntity) {
-//		return Commodity.builder()
-//				.name(commodityEntity.getName())
-//				.price(commodityEntity.getPrice())
-//				.unit(commodityEntity.getUnit())
-//				.imgUrl(commodityEntity.getImgUrl())
-//				.id(commodityEntity.getId())
-//				.build();
-//	}
+	@Test
+	void shouldAddCommodity() throws Exception{
+		CommodityEntity newCommodity = CommodityEntity.builder().name("雪碧").price(1).unit("瓶").imgUrl("./img.png").build();
+
+		mockMvc.perform(post("/commodity")
+				.content(convertCommodityEntityToJsonString(newCommodity))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isCreated());
+
+		assertEquals(7, commodityRepo.findAll().size());
+		assertEquals("雪碧", commodityRepo.findById(7).get().getName());
+	}
 
 	private String convertOrderToJsonString(Order order) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = objectMapper.writeValueAsString(order);
 
-//		StringBuilder stringBuilder =new StringBuilder(jsonString.substring(0, jsonString.length() - 1));
-//		String userJson = objectMapper.writeValueAsString(user);
-//		StringBuilder output = stringBuilder.append(",\"user\":").append(userJson).append("}");
 		return jsonString;
 	}
 
 	private String convertCommodityEntityToJsonString(CommodityEntity commodity) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = objectMapper.writeValueAsString(commodity);
-
-//		StringBuilder stringBuilder =new StringBuilder(jsonString.substring(0, jsonString.length() - 1));
-//		String userJson = objectMapper.writeValueAsString(user);
-//		StringBuilder output = stringBuilder.append(",\"user\":").append(userJson).append("}");
 		return jsonString;
 	}
 }
