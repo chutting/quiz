@@ -59,7 +59,7 @@ class OrderItem extends Component {
       method: 'DELETE'
     }).then(response => { 
       if (response.status === 204) {
-        console.log('删除成功');
+        window.location.reload();
       }
     });
   }
