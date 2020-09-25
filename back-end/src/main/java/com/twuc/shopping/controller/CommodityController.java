@@ -21,4 +21,5 @@ public class CommodityController {
     List<CommodityEntity> result = commodityService.findAll();
     return ResponseEntity.ok(result);
   }
+
 }

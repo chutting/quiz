@@ -5,6 +5,7 @@ import com.twuc.shopping.controller.CommodityController;
 import com.twuc.shopping.domin.Commodity;
 import com.twuc.shopping.domin.Order;
 import com.twuc.shopping.entity.CommodityEntity;
+import com.twuc.shopping.entity.OrderEntity;
 import com.twuc.shopping.repository.CommodityRepository;
 import com.twuc.shopping.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,6 @@ class ShoppingApplicationTests {
 
 		Order order = Order.builder()
 				.commodity(commodityEntity)
-				.count(1)
 				.build();
 
 		mockMvc.perform(post("/order")
@@ -74,6 +74,38 @@ class ShoppingApplicationTests {
 				.andExpect(status().isCreated());
 
 		assertEquals(1, orderRepo.findAll().size());
+
+		mockMvc.perform(post("/order")
+				.content(convertOrderToJsonString(order))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isCreated());
+
+		assertEquals(1, orderRepo.findAll().size());
+		assertEquals(2, orderRepo.findByCommodityId(1).get().getCount());
+	}
+
+	@Test
+	void shouldGetAllOrders() throws Exception{
+		CommodityEntity commodityEntity1  = commodityRepo.findById(1).get();
+		CommodityEntity commodityEntity2  = commodityRepo.findById(2).get();
+
+
+		OrderEntity order1 = OrderEntity.builder()
+				.count(2)
+				.commodity(commodityEntity1)
+				.build();
+
+		OrderEntity order2 = OrderEntity.builder()
+				.commodity(commodityEntity2)
+				.count(7)
+				.build();
+
+		orderRepo.save(order1);
+		orderRepo.save(order2);
+
+		mockMvc.perform(get("/orders"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(2)));
 	}
 
 //	private Commodity convertCommodityEntityToCommodity(CommodityEntity commodityEntity) {

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Order {
 
-  private int id;
+  private int id = 0;
 
   private CommodityEntity commodity;
 
