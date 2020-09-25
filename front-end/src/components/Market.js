@@ -23,11 +23,7 @@ class Market extends Component {
     return <section className="market">
       {
         this.state.commodities.map((commodity, index) => {
-          return <CommodityItem 
-          name={commodity.name} 
-          price={commodity.price} 
-          img_url = {commodity.price.img_url}
-          key = {`commodity${index}`}/>
+          return <CommodityItem item = {commodity} key = {`commodity${index}`}/>;
         })
       }
     </section>
@@ -35,11 +31,31 @@ class Market extends Component {
 }
 
 class CommodityItem extends Component {
+
+  handleAddToCart = () => {
+    // const json = JSON.parse(this.props);
+    console.log(this.props.item);
+    fetch('http://localhost:8080/order', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.props.item),
+      method: 'POST'
+    }).then(response => { 
+      if (response.status === 201) {
+        console.log('添加成功');
+      }
+    });
+  }
+
   render() {
+    const {name, price, unit} = this.props;
+
     return <div className="market-item">
-      <img src={imgPlaceholder} alt={this.props.name} className="commodity-item-img"></img>
-      <p>{this.props.name}</p>
-      <p>{`单价：${this.props.price}元/瓶`}</p>
+      <img src={imgPlaceholder} alt={name} className="commodity-item-img"></img>
+      <p>{name}</p>
+      <p>{`单价：${price}元/${unit}`}</p>
+      <input type="submit" value = "+" className ="add-to-cart" onClick={this.handleAddToCart}></input>
     </div>
   }
 }
