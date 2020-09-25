@@ -17,4 +17,6 @@ public class Commodity {
   private int id;
   private String name;
   private int price;
+  private String imgUrl;
+  private String unit;
 }
