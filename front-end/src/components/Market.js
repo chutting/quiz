@@ -33,8 +33,6 @@ class Market extends Component {
 class CommodityItem extends Component {
 
   handleAddToCart = () => {
-    // const json = JSON.parse(this.props);
-    console.log(this.props.item);
     fetch('http://localhost:8080/order', {
       headers: {
         'Content-Type': 'application/json'

@@ -19,6 +19,12 @@ class Order extends Component {
 
 
   render() {
+    if (this.state.orders.length === 0) {
+      return <section className="no-orders">
+        <p>暂无订单，返回商城页面继续购买</p>
+      </section>
+    }
+
     return <section className="order">
       <table>
         <thead>
@@ -43,6 +49,21 @@ class Order extends Component {
 }
 
 class OrderItem extends Component {
+
+  handleDeleteOrder = () => {
+    fetch('http://localhost:8080/order', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(this.props.item.commodity),
+      method: 'DELETE'
+    }).then(response => { 
+      if (response.status === 204) {
+        console.log('删除成功');
+      }
+    });
+  }
+
   render() {
     return <tr>
       <td>{this.props.item.commodity.name}</td>
@@ -50,7 +71,7 @@ class OrderItem extends Component {
       <td>{this.props.item.count}</td>
       <td>{this.props.item.commodity.unit}</td>
       <td>
-        <input type="submit" value="删除"></input>
+        <input type="submit" value="删除" onClick={this.handleDeleteOrder}></input>
       </td>
     </tr>
   }
