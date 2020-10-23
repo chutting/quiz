@@ -27,6 +27,12 @@ public class OrderController {
     return ResponseEntity.created(null).build();
   }
 
+  @PostMapping("/orders")
+  public ResponseEntity saveOrders(@RequestBody List<CommodityEntity> commodities) {
+    orderService.save(commodities);
+    return ResponseEntity.created(null).build();
+  }
+
   @GetMapping("/orders")
   public ResponseEntity<List<OrderEntity>> findAll() {
     List<OrderEntity> allOrders = orderService.findAll();

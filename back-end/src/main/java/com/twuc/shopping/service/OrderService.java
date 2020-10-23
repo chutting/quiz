@@ -34,6 +34,12 @@ public class OrderService {
     }
   }
 
+  public void save(List<CommodityEntity> commodities) {
+    commodities.forEach(commodity -> {
+      save(commodity);
+    });
+  }
+
   public List<OrderEntity> findAll() {
     return orderRepo.findAll();
   }

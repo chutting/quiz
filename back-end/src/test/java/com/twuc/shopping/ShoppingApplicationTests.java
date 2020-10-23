@@ -17,6 +17,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -149,6 +151,21 @@ class ShoppingApplicationTests {
 		assertEquals("雪碧", commodityRepo.findById(7).get().getName());
 	}
 
+	@Test
+	void shouldAddOrders() throws Exception{
+		CommodityEntity commodityEntity1  = commodityRepo.findById(1).get();
+		CommodityEntity commodityEntity2  = commodityRepo.findById(2).get();
+
+		List<CommodityEntity> commodityEntities = Arrays.asList(commodityEntity1, commodityEntity2);
+
+		mockMvc.perform(post("/orders")
+				.content(convertCommoditiesEntityToJsonString(commodityEntities))
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isCreated());
+
+		assertEquals(2, orderRepo.findAll().size());
+	}
+
 	private String convertOrderToJsonString(Order order) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = objectMapper.writeValueAsString(order);
@@ -157,6 +174,12 @@ class ShoppingApplicationTests {
 	}
 
 	private String convertCommodityEntityToJsonString(CommodityEntity commodity) throws Exception {
+		ObjectMapper objectMapper = new ObjectMapper();
+		String jsonString = objectMapper.writeValueAsString(commodity);
+		return jsonString;
+	}
+
+	private String convertCommoditiesEntityToJsonString(List<CommodityEntity> commodity) throws Exception {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String jsonString = objectMapper.writeValueAsString(commodity);
 		return jsonString;
