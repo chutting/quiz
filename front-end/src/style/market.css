@@ -26,7 +26,7 @@ tr, td {
   width: 6px;
 }
 
-.order {
+.pop-order {
   height: 150px;
   overflow: auto;
 }

@@ -42,7 +42,6 @@ class Market extends Component {
         return order;
       })
     }
-    console.log(currentOrders);
 
     this.setState({
       orders: currentOrders

@@ -42,7 +42,7 @@ class ShoppingCartPop extends Component {
       </section>
     }
 
-    return <section className="order">
+    return <section className="pop-order">
       <table>
         <thead>
         <tr>
