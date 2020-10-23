@@ -29,4 +29,6 @@ public class OrderEntity {
   private CommodityEntity commodity;
 
   private int count;
+
+  private String orderId;
 }
